@@ -14,13 +14,13 @@ class  App extends React.Component {
     this.state={
       planes:[],
       pages:[],
-      dataPerPage:10,
+      dataPerPage:12,
       currentPage:1,
       searchTerm:''
     }
 
     this.handleClick = this.handleClick.bind(this)
-
+    
 
   }
 
@@ -28,11 +28,12 @@ class  App extends React.Component {
     this.setState({currentPage:Number(event.target.id)})
 
   }
+
   
   componentDidMount()
   {
     // Fetching the data from API and storing it as state
-    fetch('https://planedata.free.beeceptor.com').then((resp)=>{
+    fetch('https://planesdate.free.beeceptor.com').then((resp)=>{
       resp.json().then((result)=>{
         console.log(result)
         this.setState({planes:result})
@@ -46,34 +47,37 @@ class  App extends React.Component {
 
 
     const {planes, pages, dataPerPage, currentPage, searchTerm} = this.state;
+    // Filter the data based on searchTerm and store in an array planesData
     const planesData = [] 
     planes.filter((value)=>{
       if(searchTerm=="")
       {
         return value
-      }else if(value.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      {
+      }else if(value.name.toLowerCase().includes(searchTerm.toLowerCase())){
         return value
       }
     }).map((plane, index)=>{
       planesData.push({plane})
     })
+   
 
-
+ 
     // Render the plane rows based on pagination 
     const indexOfLast = currentPage * dataPerPage;
     const indexOfFirst = indexOfLast - dataPerPage;
-    const planesPerPage = planes.slice(indexOfFirst,indexOfLast);
+    const planesPerPage = planesData.slice(indexOfFirst,indexOfLast);
+
+    
     const renderPlanes = planesPerPage.map((plane, index)=>{
       return (
         <>
         <tr className='table-row'>
         <td className='table-row-desc'>{indexOfFirst+index+1}</td>
-        <td className='table-row-desc'>{plane.name}</td>
-        <td className='table-row-desc'>{plane.country}</td>
-        <td className='table-row-desc'>{plane.website}</td>
-        <td className='table-row-desc'>{plane.head_quaters}</td>
-        <td className='table-row-desc'>{plane.established}</td>
+        <td className='table-row-desc'>{plane.plane.name}</td>
+        <td className='table-row-desc'>{plane.plane.country}</td>
+        <td className='table-row-desc'>{plane.plane.website}</td>
+        <td className='table-row-desc'>{plane.plane.head_quaters}</td>
+        <td className='table-row-desc'>{plane.plane.established}</td>
         </tr>
         </>
       );
@@ -83,7 +87,7 @@ class  App extends React.Component {
 
     // Stroing the numbers in an array for pagination
     const pagenumbers = [] 
-    for(let i=1;i<=Math.ceil(this.state.planes.length/10);i++)
+    for(let i=1;i<=Math.ceil(planesData.length/this.state.dataPerPage);i++)
     {
       pagenumbers.push(i)
     }
@@ -105,6 +109,7 @@ class  App extends React.Component {
           </div>
         </div>
         {/* Table creation for displaying plane information */}
+        <div className='body-div'>
         <table className='table'>
           <tr className='table-row'>
             <th className='table-row-desc'>No.</th>
@@ -116,8 +121,13 @@ class  App extends React.Component {
           </tr>
             {renderPlanes}
       </table>
+      <div className='footer'>
+        {/* <a href=''>previous</a> */}
       <div className='pagination'>
         {renderPages}
+      </div>
+      {/* <a href=''>next</a> */}
+      </div>
       </div>
     </div>
     );
