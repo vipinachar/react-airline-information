@@ -1,8 +1,8 @@
-import logo from './logo.svg';
+
 import './App.css';
 // import main from './components/Main/main';
-import React, { useState } from "react";
-import axios from 'axios';
+import React from "react";
+
 
 
 class  App extends React.Component {
@@ -29,7 +29,7 @@ class  App extends React.Component {
   componentDidMount()
   {
     // Fetching the data from API and storing it as state   
-      fetch('https://planessss.free.beeceptor.com').then((resp)=>{
+      fetch('https://planesvalue.free.beeceptor.com').then((resp)=>{
       resp.json().then((result)=>{
         this.setState({planes:result})
           })
@@ -38,10 +38,10 @@ class  App extends React.Component {
 
 
   render() { 
-        const {planes, pages, dataPerPage, currentPage, searchTerm} = this.state;
+        const {planes, dataPerPage, currentPage, searchTerm} = this.state;
         // Filter the data based on searchTerm and store in an array planesData
         const planesData = [] 
-        planes.filter((value)=>{
+          planes.filter((value)=>{
           if(searchTerm==="")
           {
             return value
