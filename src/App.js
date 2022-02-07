@@ -48,9 +48,9 @@ class  App extends React.Component {
           }else if(value.name.toLowerCase().includes(searchTerm.toLowerCase())){
             return value
           }
-        }).map((plane, index)=>(
+        }).map((plane, index)=>{
           planesData.push({plane})
-        ))
+        })
 
 
         const indexOfLast = currentPage * dataPerPage;
